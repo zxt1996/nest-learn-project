@@ -2,12 +2,16 @@ import { Module, NestModule, MiddlewareConsumer, RequestMethod } from '@nestjs/c
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
 import { UserModule } from './users/users.module';
+import { GuardModule } from './guardmodule/guard.module';
 
 // 中间件
 import { LogMiddleware } from './middlewares/log.middleware';
 
 @Module({
-  imports: [UserModule],
+  imports: [
+    UserModule,
+    GuardModule
+  ],
   controllers: [AppController],
   providers: [AppService],
 })
