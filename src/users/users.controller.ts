@@ -1,6 +1,8 @@
-import { Controller, Get, Param, Post, Body, Header, HttpCode } from '@nestjs/common';
+import { Controller, Get, Param, Post, Body, Header, HttpCode, UsePipes } from '@nestjs/common';
 import { UserLoginDTO } from './dto/create-user.dto';
 import { UserServices } from './users.service';
+import { UserPipesDto } from './dto/userLogin.dto';
+import { ValidatePipe } from 'src/pipes/validate.pipe';
 
 interface myParams {
     id: string
@@ -45,5 +47,14 @@ export class UserController {
     @Post('login')
     login(@Body() userLoginDTO: UserLoginDTO): string {
         return userLoginDTO.username;
+    }
+
+    @Post('pipe')
+    @UsePipes(ValidatePipe)
+    loginPip(@Body() userPipesDto: UserPipesDto) {
+        return {
+            errcode: 0,
+            errmsg: 'ok'
+        }
     }
 }
