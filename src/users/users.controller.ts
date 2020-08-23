@@ -1,8 +1,14 @@
-import { Controller, Get, Param, Post, Body, Header, HttpCode, UsePipes } from '@nestjs/common';
+import { Controller, Get, Param, Post, Body, Header, HttpCode, UsePipes, UseInterceptors } from '@nestjs/common';
 import { UserLoginDTO } from './dto/create-user.dto';
 import { UserServices } from './users.service';
 import { UserPipesDto } from './dto/userLogin.dto';
+
+// 管道
 import { ValidatePipe } from 'src/pipes/validate.pipe';
+
+// 拦截器
+import { AppInterceptor } from '../interceptors/app.interceptor';
+import { ErrorsInterceptor } from '../interceptors/error.interceptor';
 
 interface myParams {
     id: string
@@ -14,6 +20,7 @@ interface myBody {
 }
 
 @Controller('user')
+@UseInterceptors(AppInterceptor)
 export class UserController {
     // 注入UserServices
     constructor(private readonly userService: UserServices) {}
@@ -51,6 +58,7 @@ export class UserController {
 
     @Post('pipe')
     @UsePipes(ValidatePipe)
+    @UseInterceptors(ErrorsInterceptor)
     loginPip(@Body() userPipesDto: UserPipesDto) {
         return {
             errcode: 0,
