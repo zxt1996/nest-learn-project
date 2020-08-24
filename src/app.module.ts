@@ -7,10 +7,13 @@ import { GuardModule } from './guardmodule/guard.module';
 // 中间件
 import { LogMiddleware } from './middlewares/log.middleware';
 
+import { AuthModule } from './auth/auth.module';
+
 @Module({
   imports: [
     UserModule,
-    GuardModule
+    GuardModule,
+    AuthModule
   ],
   controllers: [AppController],
   providers: [AppService],
