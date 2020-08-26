@@ -9,11 +9,26 @@ import { LogMiddleware } from './middlewares/log.middleware';
 
 import { AuthModule } from './auth/auth.module';
 
+import { TypeOrmModule } from '@nestjs/typeorm';
+
+// 数据库
+import { Users } from './users/users.entity';
+
 @Module({
   imports: [
     UserModule,
     GuardModule,
-    AuthModule
+    AuthModule,
+    TypeOrmModule.forRoot({
+      type: 'mysql',
+      host: 'localhost',
+      port: 3306,
+      username: 'root',
+      password: '123456',
+      database: 'test',
+      entities: [Users],
+      synchronize: true,
+    })
   ],
   controllers: [AppController],
   providers: [AppService],

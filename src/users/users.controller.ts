@@ -1,4 +1,4 @@
-import { Controller, Get, Param, Post, Body, Header, HttpCode, UsePipes, UseInterceptors } from '@nestjs/common';
+import { Controller, Get, Param, Post, Body, Header, HttpCode, UsePipes, UseInterceptors, Put, Delete } from '@nestjs/common';
 import { UserLoginDTO } from './dto/create-user.dto';
 import { UserServices } from './users.service';
 import { UserPipesDto } from './dto/userLogin.dto';
@@ -16,7 +16,9 @@ interface myParams {
 
 interface myBody {
     id: string,
-    name?: string
+    firstName: string,
+    lastName: string,
+    isActive?: boolean
 }
 
 @Controller('user')
@@ -28,7 +30,7 @@ export class UserController {
     @Get('list')
     // 使用@HttpCode(statusCode: number)装饰器设定响应状态码
     @HttpCode(200)
-    findAll(): myBody[] {
+    findAll(): Promise<myBody[]> {
         return this.userService.findAll();
     }
 
@@ -38,12 +40,12 @@ export class UserController {
         return Promise.resolve([]);
     }
 
-    @Get(':id')
-    // 输出响应头@Header(name:string, value: string)
-    @Header('x-version', '1.0.0')
-    findOne(@Param() params: myParams): string {
-        return `this is your params ${params.id}`;
-    }
+    // @Get(':id')
+    // // 输出响应头@Header(name:string, value: string)
+    // @Header('x-version', '1.0.0')
+    // findOne(@Param() params: myParams): string {
+    //     return `this is your params ${params.id}`;
+    // }
 
     @Post()
     findPostAll(@Body() data: myBody): myBody {
@@ -64,5 +66,25 @@ export class UserController {
             errcode: 0,
             errmsg: 'ok'
         }
+    }
+
+    @Put()
+    update(@Body() user: myBody) {
+        return this.userService.updateUser(user);
+    }
+
+    @Get(':id')
+    getOne(@Param() params) {
+        return this.userService.findOne(params.id);
+    }
+
+    @Get('all')
+    getAll() {
+        return this.userService.findAll();
+    }
+
+    @Delete(':id')
+    deleteUser(@Param() params) {
+        return this.userService.remove(params.id);
     }
 }
