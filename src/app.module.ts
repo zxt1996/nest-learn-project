@@ -14,6 +14,8 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 // 数据库
 import { Users } from './users/users.entity';
 
+import { MongooseModule } from '@nestjs/mongoose';
+
 @Module({
   imports: [
     UserModule,
@@ -28,7 +30,9 @@ import { Users } from './users/users.entity';
       database: 'test',
       entities: [Users],
       synchronize: true,
-    })
+    }),
+    // 连接mongo数据库
+    MongooseModule.forRoot('mongodb://localhost/nestdata')
   ],
   controllers: [AppController],
   providers: [AppService],
